@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -6,6 +6,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
+
 
 function Medicine(props) {
     const [open, setOpen] = React.useState(false);
@@ -13,6 +15,7 @@ function Medicine(props) {
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const [expiry, setExpiry] = useState('');
+    const [showData, setShowData] = useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,13 +25,11 @@ function Medicine(props) {
         setOpen(false);
     };
 
-
-    // let Medicine = JSON.stringify(MedicineData);
-
     const handleSubmit = () => {
         // console.log(name, price, quantity, expiry);
 
         let data = {
+            id: Math.floor(Math.random() * 1000),
             name,
             price,
             quantity,
@@ -36,24 +37,53 @@ function Medicine(props) {
         }
         let medicineData = JSON.parse(localStorage.getItem('medicine'));
 
-        let medicineArray = [];
-    
         if (medicineData == null) {
             localStorage.setItem('medicine', JSON.stringify([data]));
-            console.log(medicineArray);
-        }else{
+        } else {
             medicineData.push(data)
-            localStorage.setItem('medicine', JSON.stringify(medicineData));    
+            localStorage.setItem('medicine', JSON.stringify(medicineData));
         }
         handleClose();
+        getData();
+
     }
 
+
+    const getData = () => {
+        const getDataItem = JSON.parse(localStorage.getItem("medicine"));
+
+        if (getDataItem !== null) {
+            setShowData(getDataItem);
+        }
+    }
+
+    useEffect(() => {
+        getData();
+    }, [])
+
+
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'name', headerName: 'Name', width: 130 },
+        { field: 'price', headerName: 'Price', width: 130 },
+        { field: 'quantity', headerName: 'Quantity', width: 130 },
+        { field: 'expiry', headerName: 'Expiry', width: 130 },
+    ];
 
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
                 Add Medicine
             </Button>
+            <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                    rows={showData}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    checkboxSelection
+                />
+            </div>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>

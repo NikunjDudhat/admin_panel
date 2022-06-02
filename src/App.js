@@ -10,6 +10,7 @@ function App() {
   return (
     <Layout>
       <Switch>
+          <Route exact path={"/"} component={Medicine} />
           <Route exact path={"/Medicine"} component={Medicine} />
           <Route exact path={"/Doctor"} component={Doctor} />
       </Switch>
