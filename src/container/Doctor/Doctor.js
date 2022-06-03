@@ -11,11 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 
 function Doctor(props) {
-    const [open, setOpen] = React.useState(true);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [salary, setSalary] = useState('');
-    const [post, setPost] = useState('');
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -35,11 +31,19 @@ function Doctor(props) {
         initialValues: {
             name: '',
             email: '',
+            salary: '',
             post: '',
         },
         validationSchema: schema,
         onSubmit: values => {
             // alert(JSON.stringify(values, null, 2));
+            console.log(values);
+            const {
+                name,
+                email,
+                salary,
+                post
+            } = values ;
             let Emp_Data = {
                 name,
                 email,
@@ -56,6 +60,7 @@ function Doctor(props) {
             }
     
             console.log(Emp_Data);
+            setOpen(false);
         },
     });
 
@@ -117,6 +122,7 @@ function Doctor(props) {
                                 type="text"
                                 fullWidth
                                 variant="standard"
+                                onChange={formik.handleChange}
                             />
                             <TextField
                                 autoFocus

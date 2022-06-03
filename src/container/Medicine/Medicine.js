@@ -55,6 +55,7 @@ function Medicine(props) {
             localStorage.setItem('medicine', JSON.stringify(medicineData));
         }
         handleClose();
+        setName('');
         getData();
 
     }
