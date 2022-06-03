@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Formik, useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@mui/material/Button';
@@ -12,7 +12,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 function Doctor(props) {
     const [open, setOpen] = React.useState(true);
-    // const [name, email, salary, post, SetName, setEmail, setSalary, setPost] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [salary, setSalary] = useState('');
+    const [post, setPost] = useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,19 +39,32 @@ function Doctor(props) {
         },
         validationSchema: schema,
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
+            let Emp_Data = {
+                name,
+                email,
+                salary,
+                post
+            }
+            let employeeData = JSON.parse(localStorage.getItem('employee'));
+    
+            if (employeeData == null) {
+                localStorage.setItem('employee', JSON.stringify([Emp_Data]));
+            } else {
+                employeeData.push(Emp_Data)
+                localStorage.setItem('employee', JSON.stringify(employeeData));
+            }
+    
+            console.log(Emp_Data);
         },
     });
 
     const handleSubmit = () => {
         // setOpen(false);
 
-        // let Emp_Data = {
-        //     name,
-        //     email,
-        //     salary,
-        //     post
-        // }
+        
+
+        // localStorage.setItem("Doctor")
     }
 
 
@@ -59,7 +75,7 @@ function Doctor(props) {
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <Formik value={formik}>
-                    <Form onSubmit={formik.handleSubmit}>
+                    <Form key={formik} onSubmit={formik.handleSubmit}>
                         <DialogTitle>Add Employee</DialogTitle>
                         <DialogContent>
                             <TextField
@@ -97,6 +113,7 @@ function Doctor(props) {
                                 margin="dense"
                                 id="employee_salary"
                                 label="Employee Salary"
+                                name='salary'
                                 type="text"
                                 fullWidth
                                 variant="standard"

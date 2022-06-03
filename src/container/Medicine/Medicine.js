@@ -7,22 +7,33 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid } from '@mui/x-data-grid';
+import { IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 
 function Medicine(props) {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [Dopen, setDOpen] = useState(false);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const [expiry, setExpiry] = useState('');
     const [showData, setShowData] = useState([]);
+    const [Did, setDid] = useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    const handleClickDOpen = (id) => {
+        setDid(id)
+        setDOpen(true);
+    };
+
     const handleClose = () => {
         setOpen(false);
+        setDOpen(false);
     };
 
     const handleSubmit = () => {
@@ -48,6 +59,17 @@ function Medicine(props) {
 
     }
 
+    const handleDelete = () => {
+
+        let getDataItem = JSON.parse(localStorage.getItem("medicine"));
+
+        let GFilter = getDataItem.filter((g, i) => g.id !== Did)
+
+        localStorage.setItem("medicine", JSON.stringify(GFilter))
+        getData();
+        setDOpen(false);
+    }
+
 
     const getData = () => {
         const getDataItem = JSON.parse(localStorage.getItem("medicine"));
@@ -68,6 +90,20 @@ function Medicine(props) {
         { field: 'price', headerName: 'Price', width: 130 },
         { field: 'quantity', headerName: 'Quantity', width: 130 },
         { field: 'expiry', headerName: 'Expiry', width: 130 },
+        {
+            field: 'action',
+            headerName: 'Action',
+            width: 130,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <IconButton onClick={() => handleClickDOpen(params.id)} aria-label="delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    </>
+                )
+            }
+        },
     ];
 
     return (
@@ -135,6 +171,20 @@ function Medicine(props) {
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleSubmit}>Submit</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={Dopen}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Are You Sure Delete Data"}
+                </DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleClose}>No</Button>
+                    <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
                 </DialogActions>
             </Dialog>
         </div>
