@@ -8,10 +8,18 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
+import { IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 
 function Doctor(props) {
     const [open, setOpen] = useState(false);
+    const [Dopen, setDOpen] = useState(false);
+    const [editopen, setEditOpen] = useState(false);
+    const [showData, setEShowData] = useState([]);
+    const [Did, setDid] = useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -19,6 +27,18 @@ function Doctor(props) {
 
     const handleClose = () => {
         setOpen(false);
+        setDOpen(false);
+        setEditOpen(false);
+    };
+
+    const handleClickDOpen = (id) => {
+        setDid(id)
+        setDOpen(true);
+    };
+
+    const handleClickEOpen = () => {
+        // setDid(id)
+        setEditOpen(true);
     };
 
     let schema = yup.object().shape({
@@ -35,7 +55,7 @@ function Doctor(props) {
             post: '',
         },
         validationSchema: schema,
-        onSubmit: values => {
+        onSubmit: (values, { resetForm }) => {
             // alert(JSON.stringify(values, null, 2));
             console.log(values);
             const {
@@ -43,34 +63,77 @@ function Doctor(props) {
                 email,
                 salary,
                 post
-            } = values ;
+            } = values;
             let Emp_Data = {
+                id: Math.floor(Math.random() * 1000),
                 name,
                 email,
                 salary,
                 post
             }
             let employeeData = JSON.parse(localStorage.getItem('employee'));
-    
+
             if (employeeData == null) {
                 localStorage.setItem('employee', JSON.stringify([Emp_Data]));
             } else {
                 employeeData.push(Emp_Data)
                 localStorage.setItem('employee', JSON.stringify(employeeData));
             }
-    
+
             console.log(Emp_Data);
-            setOpen(false);
+            // setOpen(false);
+
+            getEData();
+            resetForm();
         },
     });
 
-    const handleSubmit = () => {
-        // setOpen(false);
+    const getEData = () => {
+        const getEDataItem = JSON.parse(localStorage.getItem("employee"));
 
-        
-
-        // localStorage.setItem("Doctor")
+        if (getEDataItem !== null) {
+            setEShowData(getEDataItem);
+        }
     }
+
+    const handleDelete = () => {
+
+        let getDataItem = JSON.parse(localStorage.getItem("employee"));
+
+        let GFilter = getDataItem.filter((g, i) => g.id !== Did)
+
+        localStorage.setItem("employee", JSON.stringify(GFilter))
+        getEData();
+        setDOpen(false);
+    }
+
+    useEffect(() => {
+        getEData();
+    }, [])
+
+    let columns = [
+        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'email', headerName: 'Email', width: 130 },
+        { field: 'salary', headerName: 'Salary', width: 130 },
+        { field: 'post', headerName: 'Post', width: 130 },
+        {
+            field: 'action', headerName: 'Action', width: 130,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <IconButton onClick={() => handleClickDOpen(params.id)} aria-label="delete">
+                            <DeleteIcon />
+                        </IconButton>
+
+                        <IconButton onClick={() => handleClickEOpen(params.id)} aria-label="Edit">
+                            <EditIcon />
+                        </IconButton>
+                    </>
+                )
+            }
+
+        },
+    ]
 
 
     return (
@@ -95,8 +158,8 @@ function Doctor(props) {
                                 onChange={formik.handleChange}
                             />
                             {
-                                formik.errors.name ? 
-                                <p className='error'>{formik.errors.name}</p> :null
+                                formik.errors.name ?
+                                    <p className='error'>{formik.errors.name}</p> : null
                             }
                             <TextField
                                 autoFocus
@@ -110,8 +173,8 @@ function Doctor(props) {
                                 onChange={formik.handleChange}
                             />
                             {
-                                formik.errors.email ? 
-                                <p className='error'>{formik.errors.email}</p> :null
+                                formik.errors.email ?
+                                    <p className='error'>{formik.errors.email}</p> : null
                             }
                             <TextField
                                 autoFocus
@@ -136,18 +199,97 @@ function Doctor(props) {
                                 onChange={formik.handleChange}
                             />
                             {
-                                formik.errors.post ? 
-                                <p className='error'>{formik.errors.post}</p> :null
+                                formik.errors.post ?
+                                    <p className='error'>{formik.errors.post}</p> : null
                             }
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={handleClose}>Cancel</Button>
-                            <Button type='submit' onClick={handleSubmit}>Add</Button>
+                            <Button type='submit'>Add</Button>
                         </DialogActions>
                     </Form>
                 </Formik>
             </Dialog>
+            <Dialog
+                open={Dopen}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Are You Sure Delete Data"}
+                </DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleClose}>No</Button>
+                    <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={editopen} onClose={handleClose}>
+                <DialogTitle>Edit</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        name='name'
+                        id="employee_name"
+                        label="Employee Name"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        // onChange={formik.handleChange}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="employee_email"
+                        label="Employee Email"
+                        type="email"
+                        name='email'
+                        fullWidth
+                        variant="standard"
+                        // onChange={formik.handleChange}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="employee_salary"
+                        label="Employee Salary"
+                        name='salary'
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        // onChange={formik.handleChange}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="employee_post"
+                        label="Employee Post"
+                        name='post'
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        // onChange={formik.handleChange}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Save</Button>
+                </DialogActions>
+            </Dialog>
+
+            <div style={{ height: 400, width: '100%' }}>
+                <DataGrid
+                    rows={showData}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    checkboxSelection
+                />
+            </div>
+
         </div>
+
     );
 }
 
