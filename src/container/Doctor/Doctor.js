@@ -20,6 +20,7 @@ function Doctor(props) {
     const [editopen, setEditOpen] = useState(false);
     const [showData, setEShowData] = useState([]);
     const [Did, setDid] = useState('');
+    const [Editdata, setEditdata] = useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,9 +37,11 @@ function Doctor(props) {
         setDOpen(true);
     };
 
-    const handleClickEOpen = () => {
-        // setDid(id)
+    const handleClickEOpen = (id) => {
         setEditOpen(true);
+        console.log(id);
+        EditData(id);
+        // setEditdata(id);
     };
 
     let schema = yup.object().shape({
@@ -110,6 +113,24 @@ function Doctor(props) {
     useEffect(() => {
         getEData();
     }, [])
+
+
+    const EditData = (id) => {
+        console.log(id);
+        
+        let GetEditData = JSON.parse(localStorage.getItem("employee"));
+
+        let EData = GetEditData.filter((e,i) => e.id == id)
+
+        console.log(JSON.stringify(EData));
+        // EData.stringify
+
+        // formik.setValues
+
+        console.log(EData);
+
+        console.log(GetEditData);
+    }
 
     let columns = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -225,7 +246,7 @@ function Doctor(props) {
                 </DialogActions>
             </Dialog>
             <Dialog open={editopen} onClose={handleClose}>
-                <DialogTitle>Edit</DialogTitle>
+                <DialogTitle>Edit Employee Data</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -284,7 +305,7 @@ function Doctor(props) {
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
-                    checkboxSelection
+                    // checkboxSelection
                 />
             </div>
 
