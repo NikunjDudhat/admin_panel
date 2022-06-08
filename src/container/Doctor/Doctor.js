@@ -20,7 +20,8 @@ function Doctor(props) {
     const [editopen, setEditOpen] = useState(false);
     const [showData, setEShowData] = useState([]);
     const [Did, setDid] = useState('');
-    const [Editdata, setEditdata] = useState([]);
+    // const [Editdata, setEditdata] = useState([]);
+    const [udata, setUdata] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -37,10 +38,22 @@ function Doctor(props) {
         setDOpen(true);
     };
 
-    const handleClickEOpen = (id) => {
-        setEditOpen(true);
-        console.log(id);
-        EditData(id);
+    const handleClickEOpen = (params) => {
+
+        setOpen(true);
+        console.log(params.row);
+        formik.setValues({
+            id: params.row.id,
+            name : params.row.name,
+            email : params.row.email,
+            salary : params.row.salary,
+            post : params.row.post,
+        })
+
+        setDid(params.id);
+        setUdata(true);
+        // console.log(id);
+        // EditData(id);
         // setEditdata(id);
     };
 
@@ -59,35 +72,38 @@ function Doctor(props) {
         },
         validationSchema: schema,
         onSubmit: (values, { resetForm }) => {
-            // alert(JSON.stringify(values, null, 2));
-            console.log(values);
-            const {
-                name,
-                email,
-                salary,
-                post
-            } = values;
-            let Emp_Data = {
-                id: Math.floor(Math.random() * 1000),
-                name,
-                email,
-                salary,
-                post
-            }
-            let employeeData = JSON.parse(localStorage.getItem('employee'));
-
-            if (employeeData == null) {
-                localStorage.setItem('employee', JSON.stringify([Emp_Data]));
+            if(udata){
+                USetData(values);
             } else {
-                employeeData.push(Emp_Data)
-                localStorage.setItem('employee', JSON.stringify(employeeData));
-            }
+                console.log(values);
+                const {
+                    name,
+                    email,
+                    salary,
+                    post
+                } = values;
+                let Emp_Data = {
+                    id: Math.floor(Math.random() * 1000),
+                    name,
+                    email,
+                    salary,
+                    post
+                }
+                let employeeData = JSON.parse(localStorage.getItem('employee'));
 
-            console.log(Emp_Data);
-            // setOpen(false);
+                if (employeeData == null) {
+                    localStorage.setItem('employee', JSON.stringify([Emp_Data]));
+                } else {
+                    employeeData.push(Emp_Data)
+                    localStorage.setItem('employee', JSON.stringify(employeeData));
+                }
 
-            getEData();
-            resetForm();
+                console.log(Emp_Data);
+                setOpen(false);
+
+                getEData();
+                resetForm();
+        }
         },
     });
 
@@ -115,26 +131,36 @@ function Doctor(props) {
     }, [])
 
 
-    const EditData = (id) => {
-        console.log(id);
+    const USetData = (values) => {
+
+        console.log(values);
+        let upData = JSON.parse(localStorage.getItem("employee"));
+        console.log(upData);
+
+        let saveData = upData.map((u) => {
+            if(u.id === Did){
+                return(
+                    values
+                )
+            }else{
+                return(
+                    u
+                )
+            }
+
+        })
+        localStorage.setItem("employee", JSON.stringify(saveData));
+        getEData();
+
+
+
         
-        let GetEditData = JSON.parse(localStorage.getItem("employee"));
-
-        let EData = GetEditData.filter((e,i) => e.id == id)
-
-        console.log(JSON.stringify(EData));
-        // EData.stringify
-
-        // formik.setValues
-
-        console.log(EData);
-
-        console.log(GetEditData);
     }
 
     let columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'email', headerName: 'Email', width: 130 },
+        { field: 'name', headerName: 'Name', width: 130 },
         { field: 'salary', headerName: 'Salary', width: 130 },
         { field: 'post', headerName: 'Post', width: 130 },
         {
@@ -146,7 +172,7 @@ function Doctor(props) {
                             <DeleteIcon />
                         </IconButton>
 
-                        <IconButton onClick={() => handleClickEOpen(params.id)} aria-label="Edit">
+                        <IconButton onClick={() => handleClickEOpen(params)} aria-label="Edit">
                             <EditIcon />
                         </IconButton>
                     </>
@@ -174,6 +200,7 @@ function Doctor(props) {
                                 id="employee_name"
                                 label="Employee Name"
                                 type="text"
+                                value={formik.values.name}
                                 fullWidth
                                 variant="standard"
                                 onChange={formik.handleChange}
@@ -189,6 +216,7 @@ function Doctor(props) {
                                 label="Employee Email"
                                 type="email"
                                 name='email'
+                                value={formik.values.email}
                                 fullWidth
                                 variant="standard"
                                 onChange={formik.handleChange}
@@ -204,6 +232,7 @@ function Doctor(props) {
                                 label="Employee Salary"
                                 name='salary'
                                 type="text"
+                                value={formik.values.salary}
                                 fullWidth
                                 variant="standard"
                                 onChange={formik.handleChange}
@@ -215,6 +244,7 @@ function Doctor(props) {
                                 label="Employee Post"
                                 name='post'
                                 type="text"
+                                value={formik.values.post}
                                 fullWidth
                                 variant="standard"
                                 onChange={formik.handleChange}
@@ -245,7 +275,8 @@ function Doctor(props) {
                     <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
                 </DialogActions>
             </Dialog>
-            <Dialog open={editopen} onClose={handleClose}>
+
+            {/* <Dialog open={editopen} onClose={handleClose}>
                 <DialogTitle>Edit Employee Data</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -254,21 +285,23 @@ function Doctor(props) {
                         name='name'
                         id="employee_name"
                         label="Employee Name"
+                        value={formik.values.name}
                         type="text"
                         fullWidth
                         variant="standard"
-                        // onChange={formik.handleChange}
+                        onChange={formik.handleChange}
                     />
                     <TextField
                         autoFocus
                         margin="dense"
                         id="employee_email"
                         label="Employee Email"
+                        value={formik.values.email}
                         type="email"
                         name='email'
                         fullWidth
                         variant="standard"
-                        // onChange={formik.handleChange}
+                        onChange={formik.handleChange}
                     />
                     <TextField
                         autoFocus
@@ -276,28 +309,30 @@ function Doctor(props) {
                         id="employee_salary"
                         label="Employee Salary"
                         name='salary'
+                        value={formik.values.salary}
                         type="text"
                         fullWidth
                         variant="standard"
-                        // onChange={formik.handleChange}
+                        onChange={formik.handleChange}
                     />
                     <TextField
                         autoFocus
                         margin="dense"
                         id="employee_post"
                         label="Employee Post"
+                        value={formik.values.post}
                         name='post'
                         type="text"
                         fullWidth
                         variant="standard"
-                        // onChange={formik.handleChange}
+                        onChange={formik.handleChange}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleClose}>Save</Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
