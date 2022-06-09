@@ -12,6 +12,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 function Doctor(props) {
@@ -22,6 +23,7 @@ function Doctor(props) {
     const [Did, setDid] = useState('');
     // const [Editdata, setEditdata] = useState([]);
     const [udata, setUdata] = useState(false);
+    let notify;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -74,6 +76,8 @@ function Doctor(props) {
         onSubmit: (values, { resetForm }) => {
             if(udata){
                 USetData(values);
+                resetForm();
+
             } else {
                 console.log(values);
                 const {
@@ -102,7 +106,9 @@ function Doctor(props) {
                 setOpen(false);
 
                 getEData();
+                notify = () => toast.success("Employee Data Successfully Add.");
                 resetForm();
+
         }
         },
     });
@@ -122,6 +128,7 @@ function Doctor(props) {
         let GFilter = getDataItem.filter((g, i) => g.id !== Did)
 
         localStorage.setItem("employee", JSON.stringify(GFilter))
+        notify(() => {toast.success("Data Deleted Successfully.")});
         getEData();
         setDOpen(false);
     }
@@ -150,17 +157,15 @@ function Doctor(props) {
 
         })
         localStorage.setItem("employee", JSON.stringify(saveData));
-        getEData();
-
-
-
-        
+        setOpen(false);
+        getEData();     
+        notify(() => {toast.success("Updata Successfully.")});
     }
 
     let columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'email', headerName: 'Email', width: 130 },
         { field: 'name', headerName: 'Name', width: 130 },
+        { field: 'email', headerName: 'Email', width: 130 },
         { field: 'salary', headerName: 'Salary', width: 130 },
         { field: 'post', headerName: 'Post', width: 130 },
         {
@@ -184,7 +189,7 @@ function Doctor(props) {
 
 
     return (
-        <div>
+        <div>            
             <Button variant="outlined" onClick={handleClickOpen}>
                 Employee Data
             </Button>
@@ -268,71 +273,13 @@ function Doctor(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Are You Sure Delete Data"}
+                    {"Are You Sure Delete Data !"}
                 </DialogTitle>
                 <DialogActions>
                     <Button onClick={handleClose}>No</Button>
                     <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
                 </DialogActions>
             </Dialog>
-
-            {/* <Dialog open={editopen} onClose={handleClose}>
-                <DialogTitle>Edit Employee Data</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        name='name'
-                        id="employee_name"
-                        label="Employee Name"
-                        value={formik.values.name}
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="employee_email"
-                        label="Employee Email"
-                        value={formik.values.email}
-                        type="email"
-                        name='email'
-                        fullWidth
-                        variant="standard"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="employee_salary"
-                        label="Employee Salary"
-                        name='salary'
-                        value={formik.values.salary}
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="employee_post"
-                        label="Employee Post"
-                        value={formik.values.post}
-                        name='post'
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        onChange={formik.handleChange}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Save</Button>
-                </DialogActions>
-            </Dialog> */}
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
@@ -342,7 +289,16 @@ function Doctor(props) {
                     rowsPerPageOptions={[5]}
                     // checkboxSelection
                 />
-            </div>
+            </div>              
+            
+            <ToastContainer 
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+            />
 
         </div>
 

@@ -5,6 +5,7 @@ import { Switch } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import Medicine from './container/Medicine/Medicine';
 import Doctor from './container/Doctor/Doctor';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (

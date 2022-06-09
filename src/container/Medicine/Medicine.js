@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { DataGrid } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 
 
@@ -21,9 +22,11 @@ function Medicine(props) {
     const [expiry, setExpiry] = useState('');
     const [showData, setShowData] = useState([]);
     const [Did, setDid] = useState('');
+    const [eTital, setETital] = useState("add");
 
     const handleClickOpen = () => {
         setOpen(true);
+        setETital('add');
     };
 
     const handleClickDOpen = (id) => {
@@ -71,6 +74,15 @@ function Medicine(props) {
         setDOpen(false);
     }
 
+    const handleEditOpen = (id) => {
+        setOpen(true);
+        setETital('edit');
+
+        // data.setValues({
+        //     name
+        // })
+    }
+
 
     const getData = () => {
         const getDataItem = JSON.parse(localStorage.getItem("medicine"));
@@ -101,6 +113,9 @@ function Medicine(props) {
                         <IconButton onClick={() => handleClickDOpen(params.id)} aria-label="delete">
                             <DeleteIcon />
                         </IconButton>
+                        <IconButton onClick={() => handleEditOpen(params.id)} aria-label="delete">
+                            <EditIcon />
+                        </IconButton>
                     </>
                 )
             }
@@ -122,12 +137,8 @@ function Medicine(props) {
                 />
             </div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Subscribe</DialogTitle>
+                <DialogTitle>{ eTital === 'edit' ? "Save Medicine" : "Add Medicine"}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
-                    </DialogContentText>
                     <TextField
                         autoFocus
                         margin="dense"
