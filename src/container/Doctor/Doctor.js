@@ -23,7 +23,7 @@ function Doctor(props) {
     const [Did, setDid] = useState('');
     // const [Editdata, setEditdata] = useState([]);
     const [udata, setUdata] = useState(false);
-    let notify;
+    // let notify;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -106,7 +106,7 @@ function Doctor(props) {
                 setOpen(false);
 
                 getEData();
-                notify = () => toast.success("Employee Data Successfully Add.");
+                toast.success("Employee Data Successfully Add.")
                 resetForm();
 
         }
@@ -128,7 +128,7 @@ function Doctor(props) {
         let GFilter = getDataItem.filter((g, i) => g.id !== Did)
 
         localStorage.setItem("employee", JSON.stringify(GFilter))
-        notify(() => {toast.success("Data Deleted Successfully.")});
+        toast.success("Data Deleted Successfully.")
         getEData();
         setDOpen(false);
     }
@@ -159,7 +159,7 @@ function Doctor(props) {
         localStorage.setItem("employee", JSON.stringify(saveData));
         setOpen(false);
         getEData();     
-        notify(() => {toast.success("Updata Successfully.")});
+        toast.success("Updata Successfully.")
     }
 
     let columns = [

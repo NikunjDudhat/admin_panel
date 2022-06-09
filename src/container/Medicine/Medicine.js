@@ -75,8 +75,8 @@ function Medicine(props) {
     }
 
     const handleEditOpen = (id) => {
-        setOpen(true);
-        setETital('edit');
+        // setOpen(true);
+        // setETital('edit');
 
         // data.setValues({
         //     name
@@ -113,9 +113,9 @@ function Medicine(props) {
                         <IconButton onClick={() => handleClickDOpen(params.id)} aria-label="delete">
                             <DeleteIcon />
                         </IconButton>
-                        <IconButton onClick={() => handleEditOpen(params.id)} aria-label="delete">
+                        {/* <IconButton onClick={() => handleEditOpen(params.id)} aria-label="delete">
                             <EditIcon />
-                        </IconButton>
+                        </IconButton> */}
                     </>
                 )
             }
