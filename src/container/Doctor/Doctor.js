@@ -108,7 +108,6 @@ function Doctor(props) {
                 getEData();
                 toast.success("Employee Data Successfully Add.")
                 resetForm();
-
         }
         },
     });

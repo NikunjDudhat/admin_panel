@@ -10,6 +10,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { Form } from 'formik';
 
 
 
@@ -23,6 +24,7 @@ function Medicine(props) {
     const [showData, setShowData] = useState([]);
     const [Did, setDid] = useState('');
     const [eTital, setETital] = useState("add");
+    const [udata, setUdata] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -42,6 +44,10 @@ function Medicine(props) {
     const handleSubmit = () => {
         // console.log(name, price, quantity, expiry);
 
+        if(udata){
+            UpdataData();
+        }else{
+
         let data = {
             id: Math.floor(Math.random() * 1000),
             name,
@@ -59,8 +65,11 @@ function Medicine(props) {
         }
         handleClose();
         setName('');
+        setPrice('');   
+        setQuantity('');    
+        setExpiry('');  
         getData();
-
+    }
     }
 
     const handleDelete = () => {
@@ -74,13 +83,53 @@ function Medicine(props) {
         setDOpen(false);
     }
 
-    const handleEditOpen = (id) => {
-        // setOpen(true);
-        // setETital('edit');
+    const handleEditOpen = (params) => {
+        console.log(params.row);
+        setOpen(true);
+        setETital('edit');
 
-        // data.setValues({
-        //     name
-        // })
+        setDid(params.row.id);
+        setName(params.row.name);
+        setPrice(params.row.price);
+        setQuantity(params.row.quantity);
+        setExpiry(params.row.expiry);
+
+        console.log(params.row.id);
+        setUdata(true);
+
+    }
+
+    const UpdataData = () => {
+
+        let localData = JSON.parse(localStorage.getItem("medicine"));
+        console.log(localData);
+
+        let ne = {
+            id: Did,
+            name: name,
+            price: price,
+            quantity: quantity,
+            expiry: expiry
+        }
+        let setData = localData.map((s) => {
+            if(s.id === Did){
+                return(
+                    ne
+                )
+            }else{
+                return(
+                    s
+                )
+            }
+        })
+        localStorage.setItem("medicine", JSON.stringify(setData));
+        getData();
+        setOpen(false);
+        setDid('');
+        setName('');
+        setPrice('');   
+        setQuantity('');    
+        setExpiry('');  
     }
 
 
@@ -113,9 +162,9 @@ function Medicine(props) {
                         <IconButton onClick={() => handleClickDOpen(params.id)} aria-label="delete">
                             <DeleteIcon />
                         </IconButton>
-                        {/* <IconButton onClick={() => handleEditOpen(params.id)} aria-label="delete">
+                        <IconButton onClick={() => handleEditOpen(params)} aria-label="delete">
                             <EditIcon />
-                        </IconButton> */}
+                        </IconButton>
                     </>
                 )
             }
@@ -137,7 +186,7 @@ function Medicine(props) {
                 />
             </div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{ eTital === 'edit' ? "Save Medicine" : "Add Medicine"}</DialogTitle>
+                <DialogTitle>{eTital === 'edit' ? "Save Medicine" : "Add Medicine"}</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -146,6 +195,7 @@ function Medicine(props) {
                         name="name"
                         label="Medicine Name"
                         fullWidth
+                        value={name}
                         variant="standard"
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -156,6 +206,7 @@ function Medicine(props) {
                         name="price"
                         label="Medicine Price"
                         fullWidth
+                        value={price}
                         variant="standard"
                         onChange={(e) => setPrice(e.target.value)}
                     />
@@ -166,6 +217,7 @@ function Medicine(props) {
                         name="quantity"
                         label="Medicine Quantity"
                         fullWidth
+                        value={quantity}
                         variant="standard"
                         onChange={(e) => setQuantity(e.target.value)}
                     />
@@ -176,6 +228,7 @@ function Medicine(props) {
                         name="expiry"
                         label="Medicine Expiry Date"
                         fullWidth
+                        value={expiry}
                         variant="standard"
                         onChange={(e) => setExpiry(e.target.value)}
                     />
