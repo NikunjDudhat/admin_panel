@@ -186,12 +186,26 @@ function Doctor(props) {
         },
     ]
 
+    const handleSearch = (val) => {
+        console.log(val);
+        let localData = JSON.parse(localStorage.getItem('employee'));
+
+        // let fData = localData.filter((f) => ())
+    }
 
     return (
         <div>            
             <Button variant="outlined" onClick={handleClickOpen}>
                 Employee Data
             </Button>
+
+                <div className='search_box'>
+                    <TextField
+                        type="text"
+                        placeholder='Search'
+                        onChange={(e) => handleSearch(e.target.value)}
+                    />
+                </div>
             <Dialog open={open} onClose={handleClose}>
                 <Formik value={formik}>
                     <Form key={formik} onSubmit={formik.handleSubmit}>
