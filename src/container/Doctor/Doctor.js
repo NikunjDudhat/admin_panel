@@ -23,6 +23,7 @@ function Doctor(props) {
     const [Did, setDid] = useState('');
     // const [Editdata, setEditdata] = useState([]);
     const [udata, setUdata] = useState(false);
+    const [filerData, setFilterData] = useState([]);
     // let notify;
 
     const handleClickOpen = () => {
@@ -190,8 +191,18 @@ function Doctor(props) {
         console.log(val);
         let localData = JSON.parse(localStorage.getItem('employee'));
 
-        // let fData = localData.filter((f) => ())
+        let fData = localData.filter((f) => (
+            f.id.toString().includes(val) ||
+            f.name.toString().toLowerCase().includes(val.toLowerCase()) ||
+            f.post.toString().toLowerCase().includes(val.toLowerCase()) ||
+            f.salary.toString().includes(val) ||
+            f.email.toString().includes(val) 
+        ))
+
+        setFilterData(fData);
     }
+
+    const fData = filerData.length > 0 ? filerData : showData
 
     return (
         <div>            
@@ -296,7 +307,7 @@ function Doctor(props) {
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={showData}
+                    rows={fData}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
