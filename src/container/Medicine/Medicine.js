@@ -11,6 +11,7 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Form } from 'formik';
+import { useSelector } from 'react-redux';
 
 
 
@@ -25,6 +26,7 @@ function Medicine(props) {
     const [Did, setDid] = useState('');
     const [eTital, setETital] = useState("add");
     const [udata, setUdata] = useState(false);
+    const store = useSelector(state => state.count)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -176,6 +178,7 @@ function Medicine(props) {
             <Button variant="outlined" onClick={handleClickOpen}>
                 Add Medicine
             </Button>
+            <p>{store.count}</p>
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                     rows={showData}
