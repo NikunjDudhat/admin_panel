@@ -1,2 +1,4 @@
 export const INCREMENT = "INCREMENT_COUNTER"
 export const DECREMENT = "DECREMENT_COUNTER"
+
+export const GET_MEDICINE = "GET_MEDICINE"

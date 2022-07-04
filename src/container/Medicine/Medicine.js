@@ -11,7 +11,8 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Form } from 'formik';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { medicines } from '../../Redux/Action/medicine.action';
 
 
 
@@ -27,6 +28,7 @@ function Medicine(props) {
     const [eTital, setETital] = useState("add");
     const [udata, setUdata] = useState(false);
     const store = useSelector(state => state.count)
+    const dispatch = useDispatch();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -143,7 +145,9 @@ function Medicine(props) {
         }
     }
 
+
     useEffect(() => {
+        dispatch(medicines())
         getData();
     }, [])
 
