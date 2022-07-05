@@ -29,6 +29,9 @@ function Medicine(props) {
     const [udata, setUdata] = useState(false);
     const store = useSelector(state => state.count)
     const dispatch = useDispatch();
+    const medicine = useSelector(state => state.medicine)
+
+    console.log(medicine);
 
     const handleClickOpen = () => {
         setOpen(true);
