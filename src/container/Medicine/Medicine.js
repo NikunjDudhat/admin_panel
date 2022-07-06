@@ -31,7 +31,7 @@ function Medicine(props) {
     const dispatch = useDispatch();
     const medicine = useSelector(state => state.medicine)
 
-    console.log(medicine);
+    console.log(medicine.isLoding, medicine.error);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -141,11 +141,7 @@ function Medicine(props) {
 
 
     const getData = () => {
-        const getDataItem = JSON.parse(localStorage.getItem("medicine"));
-
-        if (getDataItem !== null) {
-            setShowData(getDataItem);
-        }
+        setShowData(medicine.medicines);
     }
 
 
@@ -181,88 +177,95 @@ function Medicine(props) {
     ];
 
     return (
-        <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                Add Medicine
-            </Button>
-            <p>{store.count}</p>
-            <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={showData}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
-                    checkboxSelection
-                />
+        <>
+        {
+            medicine.isLoding ? 
+            <p>Loading...</p> :
+            <div>
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    Add Medicine
+                </Button>
+                <p>{store.count}</p>
+                <div style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                        rows={medicine.medicines}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                    />
+                </div>
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>{eTital === 'edit' ? "Save Medicine" : "Add Medicine"}</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            name="name"
+                            label="Medicine Name"
+                            fullWidth
+                            value={name}
+                            variant="standard"
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="price"
+                            name="price"
+                            label="Medicine Price"
+                            fullWidth
+                            value={price}
+                            variant="standard"
+                            onChange={(e) => setPrice(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="quantity"
+                            name="quantity"
+                            label="Medicine Quantity"
+                            fullWidth
+                            value={quantity}
+                            variant="standard"
+                            onChange={(e) => setQuantity(e.target.value)}
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="expiry"
+                            name="expiry"
+                            label="Medicine Expiry Date"
+                            fullWidth
+                            value={expiry}
+                            variant="standard"
+                            onChange={(e) => setExpiry(e.target.value)}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleSubmit}>Submit</Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={Dopen}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Are You Sure Delete Data"}
+                    </DialogTitle>
+                    <DialogActions>
+                        <Button onClick={handleClose}>No</Button>
+                        <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{eTital === 'edit' ? "Save Medicine" : "Add Medicine"}</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        name="name"
-                        label="Medicine Name"
-                        fullWidth
-                        value={name}
-                        variant="standard"
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="price"
-                        name="price"
-                        label="Medicine Price"
-                        fullWidth
-                        value={price}
-                        variant="standard"
-                        onChange={(e) => setPrice(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="quantity"
-                        name="quantity"
-                        label="Medicine Quantity"
-                        fullWidth
-                        value={quantity}
-                        variant="standard"
-                        onChange={(e) => setQuantity(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="expiry"
-                        name="expiry"
-                        label="Medicine Expiry Date"
-                        fullWidth
-                        value={expiry}
-                        variant="standard"
-                        onChange={(e) => setExpiry(e.target.value)}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSubmit}>Submit</Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog
-                open={Dopen}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    {"Are You Sure Delete Data"}
-                </DialogTitle>
-                <DialogActions>
-                    <Button onClick={handleClose}>No</Button>
-                    <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
+        }
+
+        </>
     );
 }
 
