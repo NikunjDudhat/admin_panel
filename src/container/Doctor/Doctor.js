@@ -23,6 +23,7 @@ function Doctor(props) {
     const [Did, setDid] = useState('');
     // const [Editdata, setEditdata] = useState([]);
     const [udata, setUdata] = useState(false);
+    const [filter, setFilter] = useState([]);
     // let notify;
 
     const handleClickOpen = () => {
@@ -190,7 +191,14 @@ function Doctor(props) {
         console.log(val);
         let localData = JSON.parse(localStorage.getItem('employee'));
 
-        // let fData = localData.filter((f) => ())
+        let fData = localData.filter((f) => (
+            f.id.toString().includes(val) ||
+            f.name.toString().includes(val) ||
+            f.email.toString().includes(val) ||
+            f.salary.toString().includes(val) ||
+            f.post.toString().includes(val) 
+        ))
+        setFilter(fData);
     }
 
     return (

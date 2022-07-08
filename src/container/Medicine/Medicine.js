@@ -12,7 +12,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Form } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import { medicines } from '../../Redux/Action/medicine.action';
+import { addMedicines, deleteMedicines, medicines } from '../../Redux/Action/medicine.action';
+import Loading from '../../conponent/Loading/Loading';
 
 
 
@@ -31,7 +32,7 @@ function Medicine(props) {
     const dispatch = useDispatch();
     const medicine = useSelector(state => state.medicine)
 
-    console.log(medicine.isLoding, medicine.error);
+    console.log(medicine.isLoding, medicine.error, medicine.medicines);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -62,14 +63,10 @@ function Medicine(props) {
             quantity,
             expiry
         }
-        let medicineData = JSON.parse(localStorage.getItem('medicine'));
+        console.log(data);
+        
+        dispatch(addMedicines(data))
 
-        if (medicineData == null) {
-            localStorage.setItem('medicine', JSON.stringify([data]));
-        } else {
-            medicineData.push(data)
-            localStorage.setItem('medicine', JSON.stringify(medicineData));
-        }
         handleClose();
         setName('');
         setPrice('');   
@@ -81,11 +78,13 @@ function Medicine(props) {
 
     const handleDelete = () => {
 
-        let getDataItem = JSON.parse(localStorage.getItem("medicine"));
+        // let getDataItem = JSON.parse(localStorage.getItem("medicine"));
 
-        let GFilter = getDataItem.filter((g, i) => g.id !== Did)
+        // let GFilter = getDataItem.filter((g, i) => g.id !== Did)
 
-        localStorage.setItem("medicine", JSON.stringify(GFilter))
+        // localStorage.setItem("medicine", JSON.stringify(GFilter))
+
+        dispatch(deleteMedicines(Did))
         getData();
         setDOpen(false);
     }
@@ -180,89 +179,91 @@ function Medicine(props) {
         <>
         {
             medicine.isLoding ? 
-            <p>Loading...</p> :
-            <div>
-                <Button variant="outlined" onClick={handleClickOpen}>
-                    Add Medicine
-                </Button>
-                <p>{store.count}</p>
-                <div style={{ height: 400, width: '100%' }}>
-                    <DataGrid
-                        rows={medicine.medicines}
-                        columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
-                        checkboxSelection
-                    />
-                </div>
-                <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>{eTital === 'edit' ? "Save Medicine" : "Add Medicine"}</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            name="name"
-                            label="Medicine Name"
-                            fullWidth
-                            value={name}
-                            variant="standard"
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="price"
-                            name="price"
-                            label="Medicine Price"
-                            fullWidth
-                            value={price}
-                            variant="standard"
-                            onChange={(e) => setPrice(e.target.value)}
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="quantity"
-                            name="quantity"
-                            label="Medicine Quantity"
-                            fullWidth
-                            value={quantity}
-                            variant="standard"
-                            onChange={(e) => setQuantity(e.target.value)}
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="expiry"
-                            name="expiry"
-                            label="Medicine Expiry Date"
-                            fullWidth
-                            value={expiry}
-                            variant="standard"
-                            onChange={(e) => setExpiry(e.target.value)}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleSubmit}>Submit</Button>
-                    </DialogActions>
-                </Dialog>
-                <Dialog
-                    open={Dopen}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">
-                        {"Are You Sure Delete Data"}
-                    </DialogTitle>
-                    <DialogActions>
-                        <Button onClick={handleClose}>No</Button>
-                        <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
+                <Loading/> :
+                (medicine.error ? <p>{medicine.error}</p> : 
+                    <div>
+                        <Button variant="outlined" onClick={handleClickOpen}>
+                            Add Medicine
+                        </Button>
+                        <p>{store.count}</p>
+                        <div style={{ height: 400, width: '100%' }}>
+                            <DataGrid
+                                rows={medicine.medicines}
+                                columns={columns}
+                                pageSize={5}
+                                rowsPerPageOptions={[5]}
+                                checkboxSelection
+                            />
+                        </div>
+                        <Dialog open={open} onClose={handleClose}>
+                            <DialogTitle>{eTital === 'edit' ? "Save Medicine" : "Add Medicine"}</DialogTitle>
+                            <DialogContent>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    name="name"
+                                    label="Medicine Name"
+                                    fullWidth
+                                    value={name}
+                                    variant="standard"
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="price"
+                                    name="price"
+                                    label="Medicine Price"
+                                    fullWidth
+                                    value={price}
+                                    variant="standard"
+                                    onChange={(e) => setPrice(e.target.value)}
+                                />
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="quantity"
+                                    name="quantity"
+                                    label="Medicine Quantity"
+                                    fullWidth
+                                    value={quantity}
+                                    variant="standard"
+                                    onChange={(e) => setQuantity(e.target.value)}
+                                />
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="expiry"
+                                    name="expiry"
+                                    label="Medicine Expiry Date"
+                                    fullWidth
+                                    value={expiry}
+                                    variant="standard"
+                                    onChange={(e) => setExpiry(e.target.value)}
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button onClick={handleSubmit}>Submit</Button>
+                            </DialogActions>
+                        </Dialog>
+                        <Dialog
+                            open={Dopen}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Are You Sure Delete Data"}
+                            </DialogTitle>
+                            <DialogActions>
+                                <Button onClick={handleClose}>No</Button>
+                                <Button onClick={() => handleDelete()} autoFocus>Yes</Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                )
         }
 
         </>
