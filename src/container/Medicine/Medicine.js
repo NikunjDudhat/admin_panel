@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Form } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import { addMedicines, deleteMedicines, medicines } from '../../Redux/Action/medicine.action';
+import { addMedicines, deleteMedicines, medicines, updateMedicines } from '../../Redux/Action/medicine.action';
 import Loading from '../../conponent/Loading/Loading';
 
 
@@ -94,7 +94,7 @@ function Medicine(props) {
         setOpen(true);
         setETital('edit');
 
-        setDid(params.row.id);
+        setDid(params.id);
         setName(params.row.name);
         setPrice(params.row.price);
         setQuantity(params.row.quantity);
@@ -105,37 +105,40 @@ function Medicine(props) {
 
     }
 
-    const UpdataData = () => {
+    const UpdataData = (value) => {
+        console.log(value);
+        // let localData = JSON.parse(localStorage.getItem("medicine"));
+        // console.log(localData);
 
-        let localData = JSON.parse(localStorage.getItem("medicine"));
-        console.log(localData);
+        // let ne = {
+        //     id: Did,
+        //     name: name,
+        //     price: price,
+        //     quantity: quantity,
+        //     expiry: expiry
+        // }
+        // let setData = localData.map((s) => {
+        //     if(s.id === Did){
+        //         return(
+        //             ne
+        //         )
+        //     }else{
+        //         return(
+        //             s
+        //         )
+        //     }
+        // })
+        // localStorage.setItem("medicine", JSON.stringify(setData));
 
-        let ne = {
-            id: Did,
-            name: name,
-            price: price,
-            quantity: quantity,
-            expiry: expiry
-        }
-        let setData = localData.map((s) => {
-            if(s.id === Did){
-                return(
-                    ne
-                )
-            }else{
-                return(
-                    s
-                )
-            }
-        })
-        localStorage.setItem("medicine", JSON.stringify(setData));
-        getData();
+        dispatch(updateMedicines(value))
+
         setOpen(false);
         setDid('');
         setName('');
         setPrice('');   
         setQuantity('');    
         setExpiry('');  
+        getData();
     }
 
 

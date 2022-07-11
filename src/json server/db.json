@@ -2,15 +2,8 @@
   "medicines": [
     {
       "id": 105,
-      "name": "Phenytoin",
-      "quantity": 63,
-      "price": 250,
-      "expiry": 2021
-    },
-    {
-      "id": 993,
       "name": "PQR",
-      "price": "500",
+      "price": "5000",
       "quantity": "2",
       "expiry": "2024"
     },
