@@ -100,6 +100,7 @@ export const deleteMedicines = (id) => (dispatch) => {
 }
 
 export const updateMedicines = (data) => (dispatch) => {
+    console.log(data);
     try {
         dispatch(loadingMedicines())
         setTimeout (

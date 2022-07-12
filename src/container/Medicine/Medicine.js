@@ -32,7 +32,6 @@ function Medicine(props) {
     const dispatch = useDispatch();
     const medicine = useSelector(state => state.medicine)
 
-    console.log(medicine.isLoding, medicine.error, medicine.medicines);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -110,13 +109,13 @@ function Medicine(props) {
         // let localData = JSON.parse(localStorage.getItem("medicine"));
         // console.log(localData);
 
-        // let ne = {
-        //     id: Did,
-        //     name: name,
-        //     price: price,
-        //     quantity: quantity,
-        //     expiry: expiry
-        // }
+        let ne = {
+            id: Did,
+            name: name,
+            price: price,
+            quantity: quantity,
+            expiry: expiry
+        }
         // let setData = localData.map((s) => {
         //     if(s.id === Did){
         //         return(
@@ -129,8 +128,7 @@ function Medicine(props) {
         //     }
         // })
         // localStorage.setItem("medicine", JSON.stringify(setData));
-
-        dispatch(updateMedicines(value))
+        dispatch(updateMedicines(ne));
 
         setOpen(false);
         setDid('');
