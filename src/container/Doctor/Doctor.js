@@ -199,7 +199,9 @@ function Doctor(props) {
             f.post.toString().includes(val) 
         ))
         setFilter(fData);
+        
     }
+    const filterData = filter.length > 0 ? filter : showData;
 
     return (
         <div>            
@@ -304,7 +306,7 @@ function Doctor(props) {
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={showData}
+                    rows={filterData}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}

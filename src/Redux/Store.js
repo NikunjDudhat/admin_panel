@@ -7,6 +7,7 @@ import { RootRedux } from "./Reducer/combineReducers";
 const persistConfig = {
     key: 'root',
     storage,
+    whitelist: ['count']
 }
 
 const persistedReducer = persistReducer(persistConfig, RootRedux)

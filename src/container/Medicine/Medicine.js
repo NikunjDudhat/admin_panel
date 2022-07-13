@@ -25,6 +25,7 @@ function Medicine(props) {
     const [quantity, setQuantity] = useState('');
     const [expiry, setExpiry] = useState('');
     const [showData, setShowData] = useState([]);
+    const [filter, setFilter] = useState([]);
     const [Did, setDid] = useState('');
     const [eTital, setETital] = useState("add");
     const [udata, setUdata] = useState(false);
@@ -176,6 +177,23 @@ function Medicine(props) {
         },
     ];
 
+    const handleSearch = (val) => {
+        // console.log(val);
+        // let localData = JSON.parse(localStorage.getItem('employee'));
+
+        let fData = medicine.medicines.filter((f) => (
+            f.id.toString().includes(val) ||
+            f.name.toString().includes(val) ||
+            f.price.toString().includes(val) ||
+            f.quantity.toString().includes(val) ||
+            f.expiry.toString().includes(val) 
+        ))
+        console.log(fData);
+        setFilter(fData);
+        
+    }
+    const filterData = filter.length > 0 ? filter : showData;
+
     return (
         <>
         {
@@ -186,10 +204,17 @@ function Medicine(props) {
                         <Button variant="outlined" onClick={handleClickOpen}>
                             Add Medicine
                         </Button>
+                        <div className='search_box'>
+                            <TextField
+                                type="text"
+                                placeholder='Search'
+                                onChange={(e) => handleSearch(e.target.value)}
+                            />
+                        </div>
                         <p>{store.count}</p>
                         <div style={{ height: 400, width: '100%' }}>
                             <DataGrid
-                                rows={medicine.medicines}
+                                rows={filterData}
                                 columns={columns}
                                 pageSize={5}
                                 rowsPerPageOptions={[5]}
