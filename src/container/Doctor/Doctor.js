@@ -13,6 +13,8 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { getdoctor } from '../../Redux/Action/doctor.action';
 
 
 function Doctor(props) {
@@ -24,6 +26,10 @@ function Doctor(props) {
     // const [Editdata, setEditdata] = useState([]);
     const [udata, setUdata] = useState(false);
     const [filter, setFilter] = useState([]);
+    const dispatch = useDispatch();
+    const doctor = useSelector(state => state.doctor)
+
+    console.log(doctor.doctor);
     // let notify;
 
     const handleClickOpen = () => {
@@ -119,6 +125,8 @@ function Doctor(props) {
         if (getEDataItem !== null) {
             setEShowData(getEDataItem);
         }
+        // setEShowData(doctor.getdoctor);
+
     }
 
     const handleDelete = () => {
@@ -134,6 +142,7 @@ function Doctor(props) {
     }
 
     useEffect(() => {
+        dispatch(getdoctor())
         getEData();
     }, [])
 

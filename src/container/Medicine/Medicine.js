@@ -24,15 +24,16 @@ function Medicine(props) {
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const [expiry, setExpiry] = useState('');
-    const [showData, setShowData] = useState([]);
-    const [filter, setFilter] = useState([]);
+    
+    
     const [Did, setDid] = useState('');
     const [eTital, setETital] = useState("add");
     const [udata, setUdata] = useState(false);
+    const [showData, setShowData] = useState([]);
     const store = useSelector(state => state.count)
     const dispatch = useDispatch();
     const medicine = useSelector(state => state.medicine)
-
+    const [filter, setFilter] = useState(medicine.medicines);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -148,9 +149,13 @@ function Medicine(props) {
 
     useEffect(() => {
         dispatch(medicines())
-        getData();
     }, [])
 
+    useEffect(
+        () => {
+            getData();
+        },
+    [medicine.isLoding])
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
