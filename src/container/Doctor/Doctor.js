@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import { getdoctor } from '../../Redux/Action/doctor.action';
+import { getdoctor, postdoctor } from '../../Redux/Action/doctor.action';
 
 
 function Doctor(props) {
@@ -100,14 +100,16 @@ function Doctor(props) {
                     salary,
                     post
                 }
-                let employeeData = JSON.parse(localStorage.getItem('employee'));
+                // let employeeData = JSON.parse(localStorage.getItem('employee'));
 
-                if (employeeData == null) {
-                    localStorage.setItem('employee', JSON.stringify([Emp_Data]));
-                } else {
-                    employeeData.push(Emp_Data)
-                    localStorage.setItem('employee', JSON.stringify(employeeData));
-                }
+                // if (employeeData == null) {
+                //     localStorage.setItem('employee', JSON.stringify([Emp_Data]));
+                // } else {
+                //     employeeData.push(Emp_Data)
+                //     localStorage.setItem('employee', JSON.stringify(employeeData));
+                // }
+
+                dispatch(postdoctor(Emp_Data))
 
                 console.log(Emp_Data);
                 setOpen(false);
@@ -120,12 +122,12 @@ function Doctor(props) {
     });
 
     const getEData = () => {
-        const getEDataItem = JSON.parse(localStorage.getItem("employee"));
+        // const getEDataItem = JSON.parse(localStorage.getItem("employee"));
 
-        if (getEDataItem !== null) {
-            setEShowData(getEDataItem);
-        }
-        // setEShowData(doctor.getdoctor);
+        // if (getEDataItem !== null) {
+        //     setEShowData(getEDataItem);
+        // }
+        setEShowData(doctor.doctor);
 
     }
 
@@ -315,7 +317,7 @@ function Doctor(props) {
 
             <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
-                    rows={filterData}
+                    rows={doctor.doctor}
                     columns={columns}
                     pageSize={5}
                     rowsPerPageOptions={[5]}

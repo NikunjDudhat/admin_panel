@@ -1,3 +1,4 @@
+import { getDoctorData, postDoctorData } from '../../common/apis/doctor.api'
 import { BASE_URL } from '../../shared/baseURL'
 import * as ActionTypes from '../ActionType'
 
@@ -5,27 +6,42 @@ import * as ActionTypes from '../ActionType'
 export const getdoctor = () => (dispatch) => {
     try {
         dispatch(loadingMedicines())
-        setTimeout (
-            function () {
-                fetch(BASE_URL + 'doctor')
-                .then(response => {
-                    if (response.ok) {
-                        return response;
-                    } else {
-                        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                        error.response = response;
-                        throw error;
-                    }
-                },
-                error => {
-                    var errmess = new Error(error.message);
-                    throw errmess;
-                })
-                .then(response => response.json())
-                .then(doctors => dispatch({type : ActionTypes.GET_DOCTOR, payload : doctors}))
-                .catch(error => dispatch(errorMedicines(error.message)))
-            }
-        , 3000)
+
+        getDoctorData()
+        .then((data) => dispatch({type : ActionTypes.GET_DOCTOR, payload : data.data}))
+        // setTimeout (
+        //     function () {
+        //         fetch(BASE_URL + 'doctor')
+        //         .then(response => {
+        //             if (response.ok) {
+        //                 return response;
+        //             } else {
+        //                 var error = new Error('Error ' + response.status + ': ' + response.statusText);
+        //                 error.response = response;
+        //                 throw error;
+        //             }
+        //         },
+        //         error => {
+        //             var errmess = new Error(error.message);
+        //             throw errmess;
+        //         })
+        //         .then(response => response.json())
+        //         .then(doctors => dispatch({type : ActionTypes.GET_DOCTOR, payload : doctors}))
+        //         .catch(error => dispatch(errorMedicines(error.message)))
+        //     }
+        // , 3000)
+
+    } catch(error) {
+        dispatch(errorMedicines(error.message))
+    }
+}
+
+export const postdoctor = (data) => (dispatch) => {
+    try {
+        dispatch(loadingMedicines())
+
+        postDoctorData(data)
+        .then((data) => dispatch({type : ActionTypes.POST_DOCTOR, payload : data}))
 
     } catch(error) {
         dispatch(errorMedicines(error.message))

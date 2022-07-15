@@ -23,6 +23,13 @@ export const DoctorReducers = (state = initalState, action) => {
                 doctor : action.payload,
                 error : ''
             } 
+            case ActionTypes.POST_DOCTOR : 
+            return {
+                ...state,
+                isLoding : false,
+                doctor : state.medicines.concat(action.payload),
+                error : ''
+            } 
         case ActionTypes.ERROR_MEDICINES : 
             return {
                 ...state,
