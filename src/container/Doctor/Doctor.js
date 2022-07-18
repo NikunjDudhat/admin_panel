@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import { getdoctor, postdoctor } from '../../Redux/Action/doctor.action';
+import { deleteDoctor, getdoctor, postdoctor } from '../../Redux/Action/doctor.action';
 
 
 function Doctor(props) {
@@ -133,14 +133,16 @@ function Doctor(props) {
 
     const handleDelete = () => {
 
-        let getDataItem = JSON.parse(localStorage.getItem("employee"));
+        // let getDataItem = JSON.parse(localStorage.getItem("employee"));
 
-        let GFilter = getDataItem.filter((g, i) => g.id !== Did)
+        // let GFilter = getDataItem.filter((g, i) => g.id !== Did)
 
-        localStorage.setItem("employee", JSON.stringify(GFilter))
+        // localStorage.setItem("employee", JSON.stringify(GFilter))
+
+        dispatch(deleteDoctor(Did))
         toast.success("Data Deleted Successfully.")
-        getEData();
         setDOpen(false);
+        getEData();
     }
 
     useEffect(() => {

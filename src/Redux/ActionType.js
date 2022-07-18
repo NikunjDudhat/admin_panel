@@ -11,3 +11,4 @@ export const UPDATE_MEDICINES = "UPDATE_MEDICINES"
 
 export const GET_DOCTOR = "GET_DOCTOR"
 export const POST_DOCTOR = "POST_DOCTOR"
+export const DELETE_DOCTOR = "DELETE_DOCTOR"

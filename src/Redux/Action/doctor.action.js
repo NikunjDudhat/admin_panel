@@ -1,4 +1,4 @@
-import { getDoctorData, postDoctorData } from '../../common/apis/doctor.api'
+import { deleteDoctorData, getDoctorData, postDoctorData } from '../../common/apis/doctor.api'
 import { BASE_URL } from '../../shared/baseURL'
 import * as ActionTypes from '../ActionType'
 
@@ -40,8 +40,20 @@ export const postdoctor = (data) => (dispatch) => {
     try {
         dispatch(loadingMedicines())
 
-        postDoctorData(data)
-        .then((data) => dispatch({type : ActionTypes.POST_DOCTOR, payload : data}))
+        return postDoctorData(data)
+        .then((data) => dispatch({type : ActionTypes.POST_DOCTOR, payload : data.data}))
+
+    } catch(error) {
+        dispatch(errorMedicines(error.message))
+    }
+}
+
+export const deleteDoctor = (id) => (dispatch) => {
+    try {
+        dispatch(loadingMedicines())
+
+        return deleteDoctorData(id)
+        .then((data) => dispatch({type : ActionTypes.DELETE_DOCTOR, payload : id}))
 
     } catch(error) {
         dispatch(errorMedicines(error.message))

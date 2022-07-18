@@ -57,27 +57,6 @@
   ],
   "doctor": [
     {
-      "id": 105,
-      "name": "PQR",
-      "salary": "5000",
-      "email": "test@g.com",
-      "post": "Demo"
-    },
-    {
-      "id": 512,
-      "name": "PQR",
-      "salary": "50000",
-      "email": "abc@a.com",
-      "post": "Test"
-    },
-    {
-      "id": 101,
-      "name": "Abacavir",
-      "salary": 15000,
-      "email": "Abacavir@q12.com",
-      "post": "Designing"
-    },
-    {
       "id": 102,
       "name": "Eltrombopag",
       "salary": 55000,
@@ -92,14 +71,32 @@
       "post": "Demo"
     },
     {
-      "id": 104,
-      "name": "Allopurinol",
-      "salary": 60000,
-      "email": "Rahul@e.com",
+      "id": 179,
+      "name": "ABC",
+      "email": "abc@123.com",
+      "salary": "30000",
+      "post": "Demo"
+    },
+    {
+      "id": 522,
+      "name": "sdfd",
+      "email": "sdf@m.com",
+      "salary": "31231",
+      "post": "Testing"
+    },
+    {
+      "id": 905,
+      "name": "dvd",
+      "email": "sdvsdv@fm.com",
+      "salary": "25255",
       "post": "Test"
     },
     {
-      "id": 513
+      "id": 647,
+      "name": "sdfd",
+      "email": "pqr123@esf.com",
+      "salary": "30000",
+      "post": "Demo"
     }
   ],
   "profile": {

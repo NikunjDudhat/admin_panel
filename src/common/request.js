@@ -21,6 +21,14 @@ export const postRequest = (path, data) => {
     return sendRequest({
         url: path,
         method: 'POST',
-        body: JSON.stringify(data)
+        headers: {'Content-Type': 'application/json'},
+        data: JSON.stringify(data)
+    })
+}
+
+export const deleteRequest = (path, id) => {
+    return sendRequest({
+        url: path + id,
+        method: 'DELETE',
     })
 }

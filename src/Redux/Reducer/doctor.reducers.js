@@ -8,7 +8,7 @@ const initalState = {
 
 
 export const DoctorReducers = (state = initalState, action) => {
-    console.log(action);
+    console.log(action.type, action.payload);
     switch (action.type) {
         case ActionTypes.LOADING_MEDICINES : 
             return {
@@ -23,11 +23,18 @@ export const DoctorReducers = (state = initalState, action) => {
                 doctor : action.payload,
                 error : ''
             } 
-            case ActionTypes.POST_DOCTOR : 
+        case ActionTypes.POST_DOCTOR : 
             return {
                 ...state,
                 isLoding : false,
-                doctor : state.medicines.concat(action.payload),
+                doctor : state.doctor.concat(action.payload),
+                error : ''
+            } 
+        case ActionTypes.DELETE_DOCTOR : 
+            return {
+                ...state,
+                isLoding : false,
+                doctor : state.doctor.filter((d, i ) => d.id !== action.payload),
                 error : ''
             } 
         case ActionTypes.ERROR_MEDICINES : 
