@@ -59,8 +59,8 @@
     {
       "id": 102,
       "name": "Eltrombopag",
-      "salary": 55000,
       "email": "test@g.com",
+      "salary": "55000",
       "post": "React"
     },
     {

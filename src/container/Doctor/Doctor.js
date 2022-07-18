@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteDoctor, getdoctor, postdoctor } from '../../Redux/Action/doctor.action';
+import { deleteDoctor, getdoctor, postdoctor, updataDoctor } from '../../Redux/Action/doctor.action';
 
 
 function Doctor(props) {
@@ -153,23 +153,25 @@ function Doctor(props) {
 
     const USetData = (values) => {
 
-        console.log(values);
-        let upData = JSON.parse(localStorage.getItem("employee"));
-        console.log(upData);
+        // console.log(values);
+        // let upData = JSON.parse(localStorage.getItem("employee"));
+        // console.log(upData);
 
-        let saveData = upData.map((u) => {
-            if(u.id === Did){
-                return(
-                    values
-                )
-            }else{
-                return(
-                    u
-                )
-            }
+        // let saveData = upData.map((u) => {
+        //     if(u.id === Did){
+        //         return(
+        //             values
+        //         )
+        //     }else{
+        //         return(
+        //             u
+        //         )
+        //     }
 
-        })
-        localStorage.setItem("employee", JSON.stringify(saveData));
+        // })
+        // localStorage.setItem("employee", JSON.stringify(saveData));
+
+        dispatch(updataDoctor(values));
         setOpen(false);
         getEData();     
         toast.success("Updata Successfully.")
