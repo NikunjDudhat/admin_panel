@@ -65,7 +65,7 @@ export const updataDoctor = (data) => (dispatch) => {
         dispatch(loadingMedicines())
 
         return updateDoctorData(data)
-        .then((data) => dispatch({type : ActionTypes.DELETE_DOCTOR, payload : data.data}))
+        .then((data) => dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data.data}))
 
     } catch(error) {
         dispatch(errorMedicines(error.message))
