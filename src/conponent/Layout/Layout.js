@@ -105,7 +105,8 @@ export default function Layout({children}) {
   const sidebar = [
       {label: "Medicine", to:"/Medicine", icon: <MedicalServicesIcon/>},
       {label: "Doctor", to:"/Doctor", icon: <PersonIcon/>},
-      {label: "Counter", to:"/Counter", icon: <HourglassEmptyIcon/>}
+      {label: "Counter", to:"/Counter", icon: <HourglassEmptyIcon/>},
+      {label: "promises", to:"/promises", icon: <HourglassEmptyIcon/>}
   ]
 
   return (

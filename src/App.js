@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { countorStore } from './Redux/Store';
 import Counter from './container/Counter/Counter';
 import { PersistGate } from 'redux-persist/integration/react';
+import Promises from './container/PromiseEx/Promises';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
               <Route exact path={"/Medicine"} component={Medicine} />
               <Route exact path={"/Doctor"} component={Doctor} />
               <Route exact path={"/Counter"} component={Counter} />
+              <Route exact path={"/promises"} component={Promises} />
           </Switch>
         </Layout>
       </PersistGate>
