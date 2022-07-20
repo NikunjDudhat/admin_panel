@@ -8,7 +8,6 @@ const initalState = {
 
 
 export const DoctorReducers = (state = initalState, action) => {
-    console.log(action.type, action.payload);
     switch (action.type) {
         case ActionTypes.LOADING_MEDICINES : 
             return {
