@@ -108,6 +108,7 @@ export default function Layout({children}) {
       {label: "Counter", to:"/Counter", icon: <HourglassEmptyIcon/>},
       {label: "Use Memo", to:"/usememo", icon: <HourglassEmptyIcon/>},
       {label: "Use Call Back", to:"/usecallback", icon: <HourglassEmptyIcon/>},
+      {label: "Use Call Back", to:"/theme", icon: <HourglassEmptyIcon/>},
   ]
 
   return (
