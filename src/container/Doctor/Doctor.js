@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Form, Formik, useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@mui/material/Button';
@@ -13,6 +13,7 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
+import TaskContext from '../Tasklist/TaskContextProvider';
 
 
 function Doctor(props) {
@@ -25,6 +26,7 @@ function Doctor(props) {
     const [udata, setUdata] = useState(false);
     const [filter, setFilter] = useState([]);
     // let notify;
+    const Theme = useContext(TaskContext);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -204,7 +206,10 @@ function Doctor(props) {
     const filterData = filter.length > 0 ? filter : showData;
 
     return (
-        <div>            
+        <div className={`${Theme.Theme}`}>
+            
+            <button onClick={() => Theme.Toogle_Theme(Theme.Theme)}>Change Theme</button>  
+
             <Button variant="outlined" onClick={handleClickOpen}>
                 Employee Data
             </Button>

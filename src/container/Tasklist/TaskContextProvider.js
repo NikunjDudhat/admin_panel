@@ -6,15 +6,15 @@ import * as ActionType from './ActionType'
 export const TaskContext = createContext();
 
 const intVal = {
-    theme : 'light',
+    Theme : 'light',
 }
 
-function TaskContextProvider({ children }) {
+export const ThemeProvider = ({ children }) => {
     
     const [state, dispatch] = useReducer(ThemeReducer, intVal);
     
-    const Toogle_Theme = (theme) => {
-        const newTheme = theme === 'light' ? "dark" : 'light';
+    const Toogle_Theme = (Theme) => {
+        const newTheme = Theme === 'light' ? "dark" : 'light';
         dispatch({type: ActionType.TOOGLE_THEME, payload : newTheme})
     }
 
@@ -25,4 +25,4 @@ function TaskContextProvider({ children }) {
     );
 }
 
-export default TaskContextProvider;
+export default TaskContext;

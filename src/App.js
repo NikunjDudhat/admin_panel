@@ -12,7 +12,7 @@ import Counter from './container/Counter/Counter';
 import { PersistGate } from 'redux-persist/integration/react';
 import UseMemo from './container/useMemo/UseMemo';
 import useCallBack from './container/useMemo/useCallBack';
-import TaskContextProvider from './container/Tasklist/TaskContextProvider';
+import { ThemeProvider } from './container/Tasklist/TaskContextProvider';
 
 function App() {
 
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-    <TaskContextProvider>
+    <ThemeProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Layout>
@@ -36,7 +36,7 @@ function App() {
           </Layout>
         </PersistGate>
       </Provider>
-    </TaskContextProvider>
+    </ThemeProvider>
     </>
   );
 }
