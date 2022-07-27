@@ -10,6 +10,7 @@ const persistConfig = {
     whitelist: ['count']
 }
 
+
 const persistedReducer = persistReducer(persistConfig, RootRedux)
 
 export const countorStore = () => {

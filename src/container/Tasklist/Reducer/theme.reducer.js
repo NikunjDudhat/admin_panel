@@ -8,6 +8,7 @@ export const ThemeReducer = (state, action) => {
                 ...state,
                 Theme : action.payload
             }
+            
         default :
             return state;    
     }

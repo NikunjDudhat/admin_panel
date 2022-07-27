@@ -9,6 +9,7 @@ const intVal = {
     Theme : 'light',
 }
 
+
 export const ThemeProvider = ({ children }) => {
     
     const [state, dispatch] = useReducer(ThemeReducer, intVal);

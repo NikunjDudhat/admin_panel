@@ -122,6 +122,7 @@ function Doctor(props) {
             setEShowData(getEDataItem);
         }
     }
+    
 
     const handleDelete = () => {
 
@@ -207,7 +208,7 @@ function Doctor(props) {
 
     return (
         <div className={`${Theme.Theme}`}>
-            
+
             <button onClick={() => Theme.Toogle_Theme(Theme.Theme)}>Change Theme</button>  
 
             <Button variant="outlined" onClick={handleClickOpen}>
