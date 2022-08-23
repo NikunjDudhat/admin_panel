@@ -1,4 +1,7 @@
+import axios from 'axios'
+import { addDoc, collection } from 'firebase/firestore'
 import { deleteDoctorData, getDoctorData, postDoctorData, updateDoctorData } from '../../common/apis/doctor.api'
+import { db } from '../../Firebase'
 import { BASE_URL } from '../../shared/baseURL'
 import * as ActionTypes from '../ActionType'
 
@@ -36,12 +39,17 @@ export const getdoctor = () => (dispatch) => {
     }
 }
 
-export const postdoctor = (data) => (dispatch) => {
+export const postdoctor = (data) => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
 
-        return postDoctorData(data)
-        .then((data) => dispatch({type : ActionTypes.POST_DOCTOR, payload : data.data}))
+        const docRef = await addDoc(collection(db, "Doctor"), { data });
+
+        dispatch({type : ActionTypes.POST_DOCTOR, payload : {id:docRef.id, ...data}})
+        console.log("Document written with ID: ", docRef.id);
+
+        // return postDoctorData(data)
+        // .then((data) => dispatch({type : ActionTypes.POST_DOCTOR, payload : data.data}))
 
     } catch(error) {
         dispatch(errorMedicines(error.message))

@@ -87,19 +87,19 @@ function Doctor(props) {
 
             } else {
                 console.log(values);
-                const {
-                    name,
-                    email,
-                    salary,
-                    post
-                } = values;
-                let Emp_Data = {
-                    id: Math.floor(Math.random() * 1000),
-                    name,
-                    email,
-                    salary,
-                    post
-                }
+                // const {
+                //     name,
+                //     email,
+                //     salary,
+                //     post
+                // } = values;
+                // let Emp_Data = {
+                //     id: Math.floor(Math.random() * 1000),
+                //     name,
+                //     email,
+                //     salary,
+                //     post
+                // }
                 // let employeeData = JSON.parse(localStorage.getItem('employee'));
 
                 // if (employeeData == null) {
@@ -109,9 +109,10 @@ function Doctor(props) {
                 //     localStorage.setItem('employee', JSON.stringify(employeeData));
                 // }
 
-                dispatch(postdoctor(Emp_Data))
+                // dispatch(postdoctor(Emp_Data))
+                dispatch(postdoctor(values))
 
-                console.log(Emp_Data);
+                // console.log(Emp_Data);
                 setOpen(false);
 
                 getEData();
