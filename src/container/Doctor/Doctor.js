@@ -179,7 +179,6 @@ function Doctor(props) {
     }
 
     let columns = [
-        { field: 'id', headerName: 'ID', width: 70 },
         { field: 'name', headerName: 'Name', width: 130 },
         { field: 'email', headerName: 'Email', width: 130 },
         { field: 'salary', headerName: 'Salary', width: 130 },

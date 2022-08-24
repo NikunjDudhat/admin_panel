@@ -1,17 +1,25 @@
 import axios from 'axios'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, getDocs, updateDoc, doc, deleteDoc  } from 'firebase/firestore'
 import { deleteDoctorData, getDoctorData, postDoctorData, updateDoctorData } from '../../common/apis/doctor.api'
 import { db } from '../../Firebase'
 import { BASE_URL } from '../../shared/baseURL'
 import * as ActionTypes from '../ActionType'
 
 
-export const getdoctor = () => (dispatch) => {
+export const getdoctor = () => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
 
-        getDoctorData()
-        .then((data) => dispatch({type : ActionTypes.GET_DOCTOR, payload : data.data}))
+        const querySnapshot = await getDocs(collection(db, "Doctor"));
+        let dataD = [];
+        querySnapshot.forEach((doc) => {
+            dataD.push({id: doc.id, ...doc.data()})
+        });
+        dispatch({type : ActionTypes.GET_DOCTOR, payload : dataD});
+
+
+        // getDoctorData()
+        // .then((data) => dispatch({type : ActionTypes.GET_DOCTOR, payload : data.data}))
         // setTimeout (
         //     function () {
         //         fetch(BASE_URL + 'doctor')
@@ -43,7 +51,7 @@ export const postdoctor = (data) => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
 
-        const docRef = await addDoc(collection(db, "Doctor"), { data });
+        const docRef = await addDoc(collection(db, "Doctor"), data );
 
         dispatch({type : ActionTypes.POST_DOCTOR, payload : {id:docRef.id, ...data}})
         console.log("Document written with ID: ", docRef.id);
@@ -56,24 +64,36 @@ export const postdoctor = (data) => async (dispatch) => {
     }
 }
 
-export const deleteDoctor = (id) => (dispatch) => {
+export const deleteDoctor = (id) => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
 
-        return deleteDoctorData(id)
-        .then((data) => dispatch({type : ActionTypes.DELETE_DOCTOR, payload : id}))
+        await deleteDoc(doc(db, "Doctor", id));
+        dispatch({type : ActionTypes.DELETE_DOCTOR, payload : id})
+        
+        // return deleteDoctorData(id)
+        // .then((data) => dispatch({type : ActionTypes.DELETE_DOCTOR, payload : id}))
 
     } catch(error) {
         dispatch(errorMedicines(error.message))
     }
 }
 
-export const updataDoctor = (data) => (dispatch) => {
+export const updataDoctor = (data) => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
+        const updataRef = doc(db, "Doctor", data.id);
 
-        return updateDoctorData(data)
-        .then((data) => dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data.data}))
+        await updateDoc(updataRef, {
+            email: data.email,
+            name: data.name,
+            post: data.post,
+            salary: data.salary,
+        });
+        dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data})
+
+        // return updateDoctorData(data)
+        // .then((data) => dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data.data}))
 
     } catch(error) {
         dispatch(errorMedicines(error.message))
