@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { addDoc, collection, getDocs, updateDoc, doc, deleteDoc  } from 'firebase/firestore'
+import { ref, uploadBytes } from 'firebase/storage'
 import { deleteDoctorData, getDoctorData, postDoctorData, updateDoctorData } from '../../common/apis/doctor.api'
-import { db } from '../../Firebase'
+import storage, { db } from '../../Firebase'
 import { BASE_URL } from '../../shared/baseURL'
 import * as ActionTypes from '../ActionType'
 
@@ -51,10 +52,16 @@ export const postdoctor = (data) => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
 
-        const docRef = await addDoc(collection(db, "Doctor"), data );
 
-        dispatch({type : ActionTypes.POST_DOCTOR, payload : {id:docRef.id, ...data}})
-        console.log("Document written with ID: ", docRef.id);
+        const storageRef = ref(storage, "Doctor/"+data.upload.name);
+
+        uploadBytes(storageRef, data.upload).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+        });
+
+        // const docRef = await addDoc(collection(db, "Doctor"), data );
+
+        // dispatch({type : ActionTypes.POST_DOCTOR, payload : {id:docRef.id, ...data}})
 
         // return postDoctorData(data)
         // .then((data) => dispatch({type : ActionTypes.POST_DOCTOR, payload : data.data}))

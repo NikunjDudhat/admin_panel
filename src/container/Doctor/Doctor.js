@@ -28,8 +28,6 @@ function Doctor(props) {
     const [filter, setFilter] = useState([]);
     const dispatch = useDispatch();
     const doctor = useSelector(state => state.doctor)
-
-    console.log(doctor.doctor);
     // let notify;
 
     const handleClickOpen = () => {
@@ -67,9 +65,10 @@ function Doctor(props) {
     };
 
     let schema = yup.object().shape({
-        name: yup.string().required("Please Enter Employee Name"),
-        email: yup.string().email("Please Enter Valid Email").required("Please Enter Employee Email"),
-        post: yup.string().required("Please Enter Employee Post"),
+        // name: yup.string().required("Please Enter Employee Name"),
+        // email: yup.string().email("Please Enter Valid Email").required("Please Enter Employee Email"),
+        // post: yup.string().required("Please Enter Employee Post"),
+        upload: yup.mixed().required("Please Upload Image"),
     });
 
     const formik = useFormik({
@@ -78,9 +77,13 @@ function Doctor(props) {
             email: '',
             salary: '',
             post: '',
+            upload: '',
         },
         validationSchema: schema,
         onSubmit: (values, { resetForm }) => {
+
+            console.log(values);
+
             if(udata){
                 USetData(values);
                 resetForm();
@@ -295,6 +298,21 @@ function Doctor(props) {
                             {
                                 formik.errors.post ?
                                     <p className='error'>{formik.errors.post}</p> : null
+                            }
+                            <input
+                                autoFocus
+                                margin="dense"
+                                id="uploadFile"
+                                label="Upload File"
+                                name='upload'
+                                type="file"
+                                fullWidth
+                                variant="standard"
+                                onChange={e => formik.setFieldValue('upload', e.target.files[0])}
+                            />
+                            {
+                                formik.errors.upload ?
+                                    <p className='error'>{formik.errors.upload}</p> : null
                             }
                         </DialogContent>
                         <DialogActions>
