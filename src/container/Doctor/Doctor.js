@@ -29,7 +29,8 @@ function Doctor(props) {
     const dispatch = useDispatch();
     const doctor = useSelector(state => state.doctor)
     // let notify;
-
+    
+    console.log(doctor.doctor);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -186,6 +187,14 @@ function Doctor(props) {
         { field: 'email', headerName: 'Email', width: 130 },
         { field: 'salary', headerName: 'Salary', width: 130 },
         { field: 'post', headerName: 'Post', width: 130 },
+        { field: 'url', headerName: 'Image', width: 130,
+            renderCell: (params) => {
+                return (
+                    <></>
+                    // <img src={} />
+                )
+            }
+        },
         {
             field: 'action', headerName: 'Action', width: 130,
             renderCell: (params) => {
