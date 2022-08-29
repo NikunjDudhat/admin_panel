@@ -188,19 +188,16 @@ function Doctor(props) {
         { field: 'salary', headerName: 'Salary', width: 130 },
         { field: 'post', headerName: 'Post', width: 130 },
         { field: 'url', headerName: 'Image', width: 130,
-            renderCell: (params) => {
-                return (
-                    <></>
-                    // <img src={} />
+            renderCell: (params) => (
+                    <img src={params.row.url} style={{width: "50px",height: "50px", borderRadius: "50%", margin: "auto"}} />
                 )
-            }
         },
         {
             field: 'action', headerName: 'Action', width: 130,
             renderCell: (params) => {
                 return (
                     <>
-                        <IconButton onClick={() => handleClickDOpen(params.id)} aria-label="delete">
+                        <IconButton onClick={() => handleClickDOpen(params.row)} aria-label="delete">
                             <DeleteIcon />
                         </IconButton>
 

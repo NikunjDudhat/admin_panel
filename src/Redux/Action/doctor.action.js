@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { addDoc, collection, getDocs, updateDoc, doc, deleteDoc  } from 'firebase/firestore'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { deleteDoctorData, getDoctorData, postDoctorData, updateDoctorData } from '../../common/apis/doctor.api'
 import storage, { db } from '../../Firebase'
 import { BASE_URL } from '../../shared/baseURL'
@@ -52,25 +52,33 @@ export const postdoctor = (data) => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
 
+        const randomName = Math.floor(Math.random() * 10000000000).toString();
 
-        const storageRef = ref(storage, "Doctor/"+data.upload.name);
+        const storageRef = ref(storage, "Doctor/"+ randomName);
 
         uploadBytes(storageRef, data.upload).then((snapshot) => {
             getDownloadURL(snapshot.ref)
                 .then(async (url) => {
                     console.log(url);
-                    const docRef = await addDoc(collection(db, "Doctor"), {email: data.email,
+                    const docRef = await addDoc(collection(db, "Doctor"), {
+                        email: data.email,
                         name: data.name,
                         post: data.post,
                         salary: data.salary,
-                        url: url});
+                        url: url,
+                        fileName: randomName,
+                    });
 
 
-                    dispatch({type : ActionTypes.POST_DOCTOR, payload : {id:docRef.id, email: data.email,
+                    dispatch({type : ActionTypes.POST_DOCTOR, payload : {
+                        id:docRef.id,
+                        email: data.email,
                         name: data.name,
                         post: data.post,
                         salary: data.salary,
-                        url: url}})
+                        url: url,
+                        fileName: randomName,
+                    }})
                 })
         });
 
@@ -86,12 +94,18 @@ export const postdoctor = (data) => async (dispatch) => {
     }
 }
 
-export const deleteDoctor = (id) => async (dispatch) => {
+export const deleteDoctor = (data) => async (dispatch) => {
+    console.log(data);
     try {
         dispatch(loadingMedicines())
+        const desertRef = ref(storage, 'Doctor/'+ data.fileName);
 
-        await deleteDoc(doc(db, "Doctor", id));
-        dispatch({type : ActionTypes.DELETE_DOCTOR, payload : id})
+        deleteObject(desertRef).then(async () => {
+            await deleteDoc(doc(db, "Doctor", data.id));
+            dispatch({type : ActionTypes.DELETE_DOCTOR, payload : data.id})
+        }).catch((error) => {
+            dispatch(errorMedicines(error.message))
+        });
         
         // return deleteDoctorData(id)
         // .then((data) => dispatch({type : ActionTypes.DELETE_DOCTOR, payload : id}))
