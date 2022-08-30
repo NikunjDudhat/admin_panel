@@ -56,6 +56,7 @@ function Doctor(props) {
             email : params.row.email,
             salary : params.row.salary,
             post : params.row.post,
+            upload: params.row.url,
         })
 
         setDid(params.id);

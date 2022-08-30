@@ -116,17 +116,31 @@ export const deleteDoctor = (data) => async (dispatch) => {
 }
 
 export const updataDoctor = (data) => async (dispatch) => {
+    console.log(data);
     try {
         dispatch(loadingMedicines())
         const updataRef = doc(db, "Doctor", data.id);
+        if(typeof data.upload === "string") {
+            await updateDoc(updataRef, {
+                email: data.email,
+                name: data.name,
+                post: data.post,
+                salary: data.salary,
+                fileName: data.fileName,
+                upload: data.upload,
+            });
+            dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data})
+        } else {
+            console.log("data with img");
+        }
 
-        await updateDoc(updataRef, {
-            email: data.email,
-            name: data.name,
-            post: data.post,
-            salary: data.salary,
-        });
-        dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data})
+        // await updateDoc(updataRef, {
+        //     email: data.email,
+        //     name: data.name,
+        //     post: data.post,
+        //     salary: data.salary,
+        // });
+        // dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data})
 
         // return updateDoctorData(data)
         // .then((data) => dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data.data}))
