@@ -49,6 +49,7 @@ export const getdoctor = () => async (dispatch) => {
 }
 
 export const postdoctor = (data) => async (dispatch) => {
+    console.log(data);
     try {
         dispatch(loadingMedicines())
 
@@ -56,7 +57,7 @@ export const postdoctor = (data) => async (dispatch) => {
 
         const storageRef = ref(storage, "Doctor/"+ randomName);
 
-        uploadBytes(storageRef, data.upload).then((snapshot) => {
+        uploadBytes(storageRef, data.url).then((snapshot) => {
             getDownloadURL(snapshot.ref)
                 .then(async (url) => {
                     console.log(url);
@@ -120,18 +121,41 @@ export const updataDoctor = (data) => async (dispatch) => {
     try {
         dispatch(loadingMedicines())
         const updataRef = doc(db, "Doctor", data.id);
-        if(typeof data.upload === "string") {
+        if(typeof data.url === "string") {
             await updateDoc(updataRef, {
                 email: data.email,
                 name: data.name,
                 post: data.post,
                 salary: data.salary,
-                fileName: data.fileName,
-                upload: data.upload,
+                url: data.url,
             });
             dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data})
         } else {
             console.log("data with img");
+            console.log(data);
+            const newStorageRef = ref(storage, "Doctor/"+ data.fileName);
+            deleteObject(newStorageRef).then(async () => {
+                const randomName = Math.floor(Math.random() * 10000000000).toString();
+                const ImgNewRef = ref(storage, "Doctor/"+ randomName);
+                uploadBytes(ImgNewRef, data.file).then((snapshot) => {
+                    getDownloadURL(snapshot.ref)
+                        .then(async (url) => {
+                            console.log(url);
+                            const docRef = await addDoc(collection(db, "Doctor"), {
+                                email: data.email,
+                                name: data.name,
+                                post: data.post,
+                                salary: data.salary,
+                                url: url,
+                                fileName: randomName,
+                            });
+                            dispatch({
+                                type: ActionTypes.UPDATE_DOCTOR, payload:{...data, fileName: randomName, file: url}
+                            })
+                        })
+                    }
+                )
+            })
         }
 
         // await updateDoc(updataRef, {

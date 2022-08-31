@@ -25,6 +25,7 @@ function Doctor(props) {
     const [Did, setDid] = useState('');
     // const [Editdata, setEditdata] = useState([]);
     const [udata, setUdata] = useState(false);
+    const [fileName, setfileName] = useState('');
     const [filter, setFilter] = useState([]);
     const dispatch = useDispatch();
     const doctor = useSelector(state => state.doctor)
@@ -56,11 +57,12 @@ function Doctor(props) {
             email : params.row.email,
             salary : params.row.salary,
             post : params.row.post,
-            upload: params.row.url,
+            url: params.row.url,
         })
 
         setDid(params.id);
         setUdata(true);
+        setfileName(params.row.fileName);
         // console.log(id);
         // EditData(id);
         // setEditdata(id);
@@ -70,7 +72,7 @@ function Doctor(props) {
         // name: yup.string().required("Please Enter Employee Name"),
         // email: yup.string().email("Please Enter Valid Email").required("Please Enter Employee Email"),
         // post: yup.string().required("Please Enter Employee Post"),
-        upload: yup.mixed().required("Please Upload Image"),
+        url: yup.mixed().required("Please Upload Image"),
     });
 
     const formik = useFormik({
@@ -79,7 +81,7 @@ function Doctor(props) {
             email: '',
             salary: '',
             post: '',
-            upload: '',
+            url: '',
         },
         validationSchema: schema,
         onSubmit: (values, { resetForm }) => {
@@ -176,8 +178,12 @@ function Doctor(props) {
 
         // })
         // localStorage.setItem("employee", JSON.stringify(saveData));
+        let Udata = {
+            fileName: fileName,
+            ...values
+        }
 
-        dispatch(updataDoctor(values));
+        dispatch(updataDoctor(Udata));
         setOpen(false);
         getEData();     
         toast.success("Updata Successfully.")
@@ -311,15 +317,15 @@ function Doctor(props) {
                                 margin="dense"
                                 id="uploadFile"
                                 label="Upload File"
-                                name='upload'
+                                name='url'
                                 type="file"
                                 fullWidth
                                 variant="standard"
-                                onChange={e => formik.setFieldValue('upload', e.target.files[0])}
+                                onChange={e => formik.setFieldValue('url', e.target.files[0])}
                             />
                             {
-                                formik.errors.upload ?
-                                    <p className='error'>{formik.errors.upload}</p> : null
+                                formik.errors.url ?
+                                    <p className='error'>{formik.errors.url}</p> : null
                             }
                         </DialogContent>
                         <DialogActions>
