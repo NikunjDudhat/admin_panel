@@ -107,6 +107,8 @@ export const deleteDoctor = (data) => async (dispatch) => {
         }).catch((error) => {
             dispatch(errorMedicines(error.message))
         });
+
+
         
         // return deleteDoctorData(id)
         // .then((data) => dispatch({type : ActionTypes.DELETE_DOCTOR, payload : id}))
@@ -127,21 +129,25 @@ export const updataDoctor = (data) => async (dispatch) => {
                 name: data.name,
                 post: data.post,
                 salary: data.salary,
+                fileName: data.fileName,
                 url: data.url,
             });
             dispatch({type : ActionTypes.UPDATE_DOCTOR, payload : data})
         } else {
             console.log("data with img");
             console.log(data);
+
             const newStorageRef = ref(storage, "Doctor/"+ data.fileName);
             deleteObject(newStorageRef).then(async () => {
+
                 const randomName = Math.floor(Math.random() * 10000000000).toString();
                 const ImgNewRef = ref(storage, "Doctor/"+ randomName);
-                uploadBytes(ImgNewRef, data.file).then((snapshot) => {
+
+                uploadBytes(ImgNewRef, data.url).then((snapshot) => {
                     getDownloadURL(snapshot.ref)
                         .then(async (url) => {
                             console.log(url);
-                            const docRef = await addDoc(collection(db, "Doctor"), {
+                            await updateDoc(updataRef, {
                                 email: data.email,
                                 name: data.name,
                                 post: data.post,
@@ -150,7 +156,7 @@ export const updataDoctor = (data) => async (dispatch) => {
                                 fileName: randomName,
                             });
                             dispatch({
-                                type: ActionTypes.UPDATE_DOCTOR, payload:{...data, fileName: randomName, file: url}
+                                type: ActionTypes.UPDATE_DOCTOR, payload:{...data, fileName: randomName, url: url}
                             })
                         })
                     }

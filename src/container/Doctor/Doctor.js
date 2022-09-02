@@ -69,9 +69,9 @@ function Doctor(props) {
     };
 
     let schema = yup.object().shape({
-        // name: yup.string().required("Please Enter Employee Name"),
-        // email: yup.string().email("Please Enter Valid Email").required("Please Enter Employee Email"),
-        // post: yup.string().required("Please Enter Employee Post"),
+        name: yup.string().required("Please Enter Employee Name"),
+        email: yup.string().email("Please Enter Valid Email").required("Please Enter Employee Email"),
+        post: yup.string().required("Please Enter Employee Post"),
         url: yup.mixed().required("Please Upload Image"),
     });
 
